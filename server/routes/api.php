@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ItemCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
@@ -20,7 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('users')->group(function() {
-
     Route::get('/all', [UserController::class, 'users']);
     Route::get('/{id}/items', [UserController::class, 'items']);
+});
+
+Route::prefix('categories')->group(function() {
+    Route::get('/', [ItemCategoryController::class, 'categories']);
 });
