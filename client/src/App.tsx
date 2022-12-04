@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import * as C from "./App.styles";
-import { Item } from "./types/Item";
-import { getCurrentMonth, filterListByMonth } from "./helpers/dateFilter";
-import { TableArea } from "./components/TableArea";
-import { InfoArea } from "./components/InfoArea";
-import { InputArea } from "./components/InputArea";
-import userService from "./services/userService";
+import { useState, useEffect } from 'react';
+import * as C from './App.styles';
+import { Item } from './types/Item';
+import { getCurrentMonth, filterListByMonth } from './helpers/dateFilter';
+import { TableArea } from './components/TableArea';
+import { InfoArea } from './components/InfoArea';
+import { InputArea } from './components/InputArea';
+import userService from './services/user.service';
 
 const App = () => {
   const [list, setList] = useState<Item[]>([]);

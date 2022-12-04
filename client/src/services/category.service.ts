@@ -1,7 +1,7 @@
-import { api } from "../services/api";
+import { api } from './api';
 
 const getAll = () => {
-  return api.get("/categories");
+  return api.get('/categories');
 };
 
 const Service = {
