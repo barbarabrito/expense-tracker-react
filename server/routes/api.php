@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ItemCategoryController;
+use App\Http\Controllers\Api\ItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
@@ -27,4 +28,8 @@ Route::prefix('users')->group(function() {
 
 Route::prefix('categories')->group(function() {
     Route::get('/', [ItemCategoryController::class, 'categories']);
+});
+
+Route::prefix('items')->group(function(){
+    Route::post('/create', [ItemController::class, 'store']);
 });
