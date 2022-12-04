@@ -1,15 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as C from "./styles";
 import { Item } from "../../types/Item";
-
-import { categories } from "../../data/categories";
+import categoryService from "../../services/categoryService";
 import { newDateAdjusted } from "../../helpers/dateFilter";
+import { ItemCategory } from "../../types/ItemCategory";
 
 type Props = {
   onAdd: (item: Item) => void;
 };
 
 export const InputArea = ({ onAdd }: Props) => {
+  const [categories, setCategories] = useState<ItemCategory[]>([]);
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const getCategories = async () => {
+    try {
+      const response = await categoryService.getAll();
+      setCategories(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const [dateField, setDateField] = useState("");
   const [categoryField, setCategoryField] = useState("");
   const [titleField, setTitleField] = useState("");
@@ -78,7 +93,7 @@ export const InputArea = ({ onAdd }: Props) => {
         >
           <>
             <option></option>
-            {categoryKeys.map((key, index) => (
+            {categoryKeys.map((key: any, index) => (
               <option key={index} value={key}>
                 {categories[key].title}
               </option>

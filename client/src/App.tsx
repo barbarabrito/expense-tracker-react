@@ -5,7 +5,7 @@ import { getCurrentMonth, filterListByMonth } from "./helpers/dateFilter";
 import { TableArea } from "./components/TableArea";
 import { InfoArea } from "./components/InfoArea";
 import { InputArea } from "./components/InputArea";
-import userService from "../src/services/userService";
+import userService from "./services/userService";
 
 const App = () => {
   const [list, setList] = useState<Item[]>([]);
@@ -17,9 +17,7 @@ const App = () => {
   const getItems = async () => {
     try {
       const response = await userService.getItemsById();
-      console.log(response.data);
       setList(response.data);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -73,7 +71,7 @@ const App = () => {
         />
 
         <InputArea onAdd={handleAddItem} />
-        <TableArea list={list} />
+        <TableArea list={filteredList} />
       </C.Body>
     </C.Container>
   );
