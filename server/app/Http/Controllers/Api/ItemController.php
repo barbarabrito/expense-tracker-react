@@ -30,4 +30,24 @@ class ItemController extends Controller
             'data' => $item
         ],201);
     }
+
+    public function destroy($id)
+    {
+        Item::findOrFail($id)->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Item deleted.',
+        ],200);
+    }
+
+    public function update(Request $request)
+    {
+        Item::findOrfail($request->id)->update($request->all());
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Item updated.'
+        ],200);
+    }
 }

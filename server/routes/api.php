@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ItemCategoryController;
 use App\Http\Controllers\Api\ItemController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
@@ -17,9 +18,8 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+Route::post('/register', [AuthController::class, 'register']);
 
 Route::prefix('users')->group(function() {
     Route::get('/all', [UserController::class, 'users']);
@@ -31,5 +31,11 @@ Route::prefix('categories')->group(function() {
 });
 
 Route::prefix('items')->group(function(){
-    Route::post('/create', [ItemController::class, 'store']);
+    Route::post('/', [ItemController::class, 'store']);
+    Route::delete('/{id}', [ItemController::class, 'destroy']);
+    Route::patch('/update/{id}', [ItemController::class, 'update']);
+});
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
