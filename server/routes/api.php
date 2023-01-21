@@ -20,6 +20,11 @@ use App\Http\Controllers\Api\UserController;
 
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
 Route::prefix('users')->group(function() {
     Route::get('/all', [UserController::class, 'users']);

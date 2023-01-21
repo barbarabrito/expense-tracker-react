@@ -10,25 +10,28 @@ class ItemController extends Controller
 {
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'date' => ['required'],
-            'title' => ['required'],
-            'value' => ['required']
-        ]);
+        try {
 
-        $item = Item::create([
-            'date' => $request->input('date'),
-            'title' => $request->input('title'),
-            'value' => $request->input('value'),
-            'user_id' => $request->input('user_id'),
-            'item_category_id' => $request->input('item_category_id'),
-        ]);
+            $item = $this->validate($request, [
+                'date' => 'required|string',
+                'title' => 'required|string',
+                'value' => 'required',
+                'user_id' => 'required',
+                'item_category_id' => 'required'
+            ]);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Item created.',
-            'data' => $item
-        ],201);
+            Item::create($item);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Item created.',
+                'data' => $item
+            ], 201);
+
+        }catch (\Exception $exception){
+            return response()->json($exception);
+        }
+
     }
 
     public function destroy($id)
@@ -44,7 +47,7 @@ class ItemController extends Controller
     public function update(Request $request)
     {
         Item::findOrfail($request->id)->update($request->all());
-        
+
         return response()->json([
             'status' => true,
             'message' => 'Item updated.'

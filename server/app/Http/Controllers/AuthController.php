@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -13,26 +12,59 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $this->validate($request, [
-            'name' => ['required'],
-            'email' => ['required'],
-            'password' => ['required']
+            'name' => 'required|string',
+            'email' => 'required|string|unique:users,email',
+            'password' => 'required|string'
         ]);
 
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-            'user_id' => $request->input('user_id'),
-            'item_category_id' => $request->input('item_category_id'),
+        try {
+
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password'))
+            ]);
+
+            $token = $user->createToken('token')->plainTextToken;
+
+            $response = [
+                'user' => $user,
+                'token' => $token
+            ];
+
+            return response($response, 201);
+
+        }catch (AuthenticationException $exception){
+            return response($exception, 500);
+        }
+    }
+
+    public function login(Request $request) {
+
+        $credentials = $request->validate([
+            'email' => ['required', 'email', 'string'],
+            'password' => ['required'],
         ]);
 
-        $token = $user->createToken('myapptoken')->plainTextToken;
+        $user = User::where('email', $credentials['email'])->first();
+        
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return response([
+                'message' => 'Bad credentials'
+            ], 401);
+        }
 
-        $response = [
-            'user' => $user,
+        $token = $user->createToken('token')->plainTextToken;
+        
+        return response([
+            'message' => $user,
             'token' => $token
-        ];
+        ], 200);
+    }
 
-        return response($response, 201);
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out.']);
     }
 }
