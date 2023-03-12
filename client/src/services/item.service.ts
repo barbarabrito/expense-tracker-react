@@ -7,7 +7,7 @@ const create = (
   user_id: number,
   item_category_id: number
 ) => {
-  return api.post('items/create', {
+  return api.post('items', {
     date,
     title,
     value,

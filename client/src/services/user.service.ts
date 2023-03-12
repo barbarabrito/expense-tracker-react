@@ -1,16 +1,27 @@
 import { api } from "./api";
 
+const login = (email:string, password: string) => {
+  return api.post('login', { email, password });
+}
+
 const getAll = () => {
-  return api.get("/users/all");
+  return api.get('/users/all');
 };
 
-const getItemsById = () => {
-  return api.get(`users/1/items`);
+const getUserItems = (id: number) => {
+  return api.get(`users/${id}/items`);
 };
+
+const logout = () => {
+  return api.post('logout');
+}
+
 
 const Service = {
   getAll,
-  getItemsById,
+  getUserItems,
+  login,
+  logout
 };
 
 export default Service;
